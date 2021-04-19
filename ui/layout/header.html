@@ -1,0 +1,19 @@
+{{define "header"}}
+<div id="logo">
+    {{.Logo}}
+</div>
+<div id="search">
+    <form action="/topic/search" method="GET">
+        <input type="text" placeholder="search">
+    </form>
+</div>
+<div id="links">
+    {{ if .IsLoggedIn }}
+        <span>{{.Username}}</span>
+        <span><a href="/user/logout">Logout</a></span>
+    {{else}}
+        <span><a href="/user/login">Login</a></span>
+        <span><a href="/user/register">Register</a></span>
+    {{end}}
+</div>
+{{end}}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{.Title}}</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <link rel="stylesheet" type="text/css" href="/script/script.js">
+        {{template "meta" .Meta}}
+    </head>
+    <body>
+        <header>{{template "header" .Header}}</header>
+        <nav>{{template "nav" .Nav}}</nav>
+        <main>{{template "main" .Main}}</main>
+    </body>
+</html>
