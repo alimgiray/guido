@@ -3,15 +3,15 @@
     <h2>Register</h2>
     <form id="auth-form" action="/user/register" method="POST">
         <div class="form-row">
-            <input type="text" name="username" placeholder="username" required>
+            <input type="text" name="username" placeholder="username" minlength="3" maxlength="20" required>
             <span>How other users will see you. Must be unique.</span>
         </div>   
         <div class="form-row">
-            <input type="email" name="email" placeholder="email">
+            <input type="email" name="email" placeholder="email" minlength="3">
             <span>Not required. But helps if you forgot your password.</span>
         </div>
         <div class="form-row">
-            <input type="password" name="password" placeholder="password" required>
+            <input type="password" name="password" placeholder="password" minlength="8" required>
             <span>Try to choose a strong one.</span>
         </div>
         <div class="form-row submit">
