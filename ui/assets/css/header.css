@@ -1,0 +1,38 @@
+#logo {
+    margin-left: 50px;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#logo a:any-link {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+#search {
+    margin-left: 40px;
+}
+
+#search input[type="text"] {
+    font-size: large;
+    color: var( --light-background-text-color);
+    background-color: var(--light-background-color);
+    padding: 10px 20px;
+    width: 50%;
+    border: 0;
+}
+
+#links {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+}
+
+#links span {
+    margin-right: 40px;
+}
+
+#links a:any-link {
+    text-decoration: none;
+    color: var(--primary-color);
+}

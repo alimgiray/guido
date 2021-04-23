@@ -26,7 +26,8 @@ func NewTopicHandler(
 
 func (t *TopicHandler) GetCreateTopicPage(c *gin.Context) {
 	c.HTML(200, "create", gin.H{
-		"Title": "Create New Topic",
+		"Title":  "Create New Topic",
+		"Header": t.config.GetHeader("", false),
 	})
 }
 
@@ -52,6 +53,7 @@ func (t *TopicHandler) GetTopic(c *gin.Context) {
 	c.HTML(200, "topic", gin.H{
 		"Title":       "Some topic",
 		"Meta":        t.config.GetMeta("desc", "k1, k2, k3"),
+		"Header":      t.config.GetHeader("", false), // TODO fix, get real values
 		"ShowSidebar": true,
 	})
 }

@@ -1,3 +1,22 @@
 {{define "main"}}
-register
+<div id="register">
+    <h2>Register</h2>
+    <form id="register-form" action="/user/register" method="POST">
+        <div class="form-row">
+            <input type="text" name="username" placeholder="username" required>
+            <span>How other users will see you. Must be unique.</span>
+        </div>   
+        <div class="form-row">
+            <input type="email" name="email" placeholder="email">
+            <span>Not required. But helps if you forgot your password.</span>
+        </div>
+        <div class="form-row">
+            <input type="password" name="password" placeholder="password" required>
+            <span>Try to choose a strong one.</span>
+        </div>
+        <div class="form-row submit">
+            <input type="submit" value="Join">
+        </div>
+    </form>
+</div>
 {{end}}

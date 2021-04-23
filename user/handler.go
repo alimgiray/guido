@@ -25,7 +25,8 @@ func NewUserHandler(
 
 func (u *UserHandler) GetLoginPage(c *gin.Context) {
 	c.HTML(200, "login", gin.H{
-		"Title": "Login",
+		"Title":  "Login",
+		"Header": u.config.GetHeader("", false),
 	})
 }
 
@@ -37,7 +38,8 @@ func (u *UserHandler) Login(c *gin.Context) {
 
 func (u *UserHandler) GetRegisterPage(c *gin.Context) {
 	c.HTML(200, "register", gin.H{
-		"Title": "Register",
+		"Title":  "Register",
+		"Header": u.config.GetHeader("", false),
 	})
 }
 

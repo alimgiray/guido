@@ -3,9 +3,6 @@ body {
     grid-template-areas: 
     "header header"
     "main main";
-    grid-template-rows: 50px 1fr;
     grid-template-columns: 1fr;
-    color: var(--primary);
-    background-color: var(--background);
 }
 
