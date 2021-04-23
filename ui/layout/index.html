@@ -3,12 +3,19 @@
     <head>
         <title>{{.Title}}</title>
         <link rel="stylesheet" type="text/css" href="/css/style.css">
+        {{ if .ShowSidebar }}
+            <link rel="stylesheet" type="text/css" href="/css/layout.css">
+        {{ else }}
+            <link rel="stylesheet" type="text/css" href="/css/layout-nosidebar.css">
+        {{ end }}
         <link rel="stylesheet" type="text/css" href="/script/script.js">
         {{template "meta" .Meta}}
     </head>
     <body>
         <header>{{template "header" .Header}}</header>
+        {{ if .ShowSidebar }}
         <nav>{{template "nav" .Nav}}</nav>
+        {{end}}
         <main>{{template "main" .Main}}</main>
     </body>
 </html>

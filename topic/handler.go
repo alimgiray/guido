@@ -50,8 +50,9 @@ func (t *TopicHandler) ListTopic(c *gin.Context) {
 
 func (t *TopicHandler) GetTopic(c *gin.Context) {
 	c.HTML(200, "topic", gin.H{
-		"Title": "Some topic",
-		"Meta":  t.config.GetMeta("desc", "k1, k2, k3"),
+		"Title":       "Some topic",
+		"Meta":        t.config.GetMeta("desc", "k1, k2, k3"),
+		"ShowSidebar": true,
 	})
 }
 
