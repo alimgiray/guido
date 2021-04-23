@@ -49,17 +49,3 @@ main {
     min-height: calc(100vh - 100px - 20px);
     padding: 10px 20px;
 }
-
-.form-row {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    margin-top: 20px;
-}
-
-.form-row span {
-    margin-top: 5px;
-    color: var(--primary-color);
-    font-size: small;
-    text-align: right;
-}

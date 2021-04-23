@@ -1,3 +1,16 @@
 {{define "main"}}
-login
+<div id="auth">
+    <h2>Login</h2>
+    <form id="auth-form" action="/user/login" method="POST">
+        <div class="form-row">
+            <input type="text" name="username" placeholder="username" required>
+        </div>   
+        <div class="form-row">
+            <input type="password" name="password" placeholder="password" required>
+        </div>
+        <div class="form-row submit">
+            <input type="submit" value="Login">
+        </div>
+    </form>
+</div>
 {{end}}
