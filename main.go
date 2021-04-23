@@ -2,9 +2,10 @@ package main
 
 import (
 	"embed"
+	"net/http"
+	"path"
 
 	"github.com/alimgiray/guido/config"
-	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 
 	"github.com/alimgiray/guido/database"
@@ -42,8 +43,12 @@ func main() {
 
 	if gin.Mode() == gin.ReleaseMode {
 		r.HTMLRender = config.EmbedRenderer(f)
-		r.Use(static.Serve("/css", config.EmbedFolder(f, "ui/assets/css")))
-		r.Use(static.Serve("/script", config.EmbedFolder(f, "ui/assets/script")))
+		r.GET("/css/*filepath", func(c *gin.Context) {
+			c.FileFromFS(path.Join("/ui/assets/", c.Request.URL.Path), http.FS(f))
+		})
+		r.GET("/script/*filepath", func(c *gin.Context) {
+			c.FileFromFS(path.Join("/ui/assets/", c.Request.URL.Path), http.FS(f))
+		})
 	} else {
 		r.HTMLRender = config.LocalRenderer()
 		r.Static("/css", "./ui/assets/css")

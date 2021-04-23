@@ -3,7 +3,6 @@ package config
 import (
 	"embed"
 	"html/template"
-	"log"
 
 	"github.com/gin-contrib/multitemplate"
 )
@@ -40,8 +39,6 @@ func EmbedRenderer(f embed.FS) multitemplate.Renderer {
 		panic(err)
 	}
 	renderer.Add("login", loginTemplate)
-
-	log.Println(loginTemplate.Templates()[0].Name())
 
 	registerTemplate, err := template.ParseFS(f,
 		"ui/layout/index.html", "ui/layout/header.html", "ui/layout/nav.html", "ui/layout/meta.html",
