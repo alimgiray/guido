@@ -3,9 +3,7 @@
     <head>
         <title>{{.Title}}</title>
         <link rel="stylesheet" type="text/css" href="/css/style.css">
-        {{ if .ShowSidebar }}
-            <link rel="stylesheet" type="text/css" href="/css/layout.css">
-        {{ else }}
+        {{ if not .ShowSidebar }}
             <link rel="stylesheet" type="text/css" href="/css/layout-nosidebar.css">
         {{ end }}
         <link rel="stylesheet" type="text/css" href="/script/script.js">
