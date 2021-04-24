@@ -40,6 +40,7 @@ func create() *sql.DB {
 
 	createAdmin(db)
 	createConfig(db)
+	createDefaultTopic(db)
 	log.Println("Database created successfully")
 
 	return db

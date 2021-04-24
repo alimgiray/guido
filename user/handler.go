@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/alimgiray/guido/config"
@@ -27,7 +28,8 @@ func NewUserHandler(
 
 func (u *UserHandler) GetLoginPage(c *gin.Context) {
 	if u.isLoggedIn(c) {
-		c.Redirect(http.StatusSeeOther, "/")
+
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", u.config.GetDefaultURL()))
 		return
 	}
 
@@ -44,7 +46,7 @@ type LoginForm struct {
 
 func (u *UserHandler) Login(c *gin.Context) {
 	if u.isLoggedIn(c) {
-		c.Redirect(http.StatusSeeOther, "/")
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", u.config.GetDefaultURL()))
 		return
 	}
 
@@ -66,12 +68,12 @@ func (u *UserHandler) Login(c *gin.Context) {
 	}
 
 	c.SetCookie("session_id", sessionID, 60*60*24*30, "/", "", true, true)
-	c.Redirect(http.StatusSeeOther, "/")
+	c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", u.config.GetDefaultURL()))
 }
 
 func (u *UserHandler) GetRegisterPage(c *gin.Context) {
 	if u.isLoggedIn(c) {
-		c.Redirect(http.StatusSeeOther, "/")
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", u.config.GetDefaultURL()))
 		return
 	}
 
@@ -89,7 +91,7 @@ type RegisterForm struct {
 
 func (u *UserHandler) Register(c *gin.Context) {
 	if u.isLoggedIn(c) {
-		c.Redirect(http.StatusSeeOther, "/")
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", u.config.GetDefaultURL()))
 		return
 	}
 
@@ -110,7 +112,7 @@ func (u *UserHandler) Register(c *gin.Context) {
 
 func (u *UserHandler) Logout(c *gin.Context) {
 	if !u.isLoggedIn(c) {
-		c.Redirect(http.StatusSeeOther, "/")
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", u.config.GetDefaultURL()))
 		return
 	}
 
@@ -118,7 +120,7 @@ func (u *UserHandler) Logout(c *gin.Context) {
 	u.sessionService.RemoveSession(cookie)
 
 	c.SetCookie("session_id", "", 0, "/", "", true, true)
-	c.Redirect(http.StatusSeeOther, "/")
+	c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", u.config.GetDefaultURL()))
 }
 
 func (u *UserHandler) isLoggedIn(c *gin.Context) bool {

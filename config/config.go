@@ -8,6 +8,7 @@ import (
 
 var defaultAppName = "Guido"
 var defaultUserType = "user"
+var defaultURL = "guido"
 
 type ConfigurationManager struct {
 	db             *database.Database
@@ -68,4 +69,11 @@ func (c *ConfigurationManager) GetNewUserType() string {
 		return val
 	}
 	return defaultUserType
+}
+
+func (c *ConfigurationManager) GetDefaultURL() string {
+	if val, ok := c.configurations["defaultURL"]; ok {
+		return val
+	}
+	return defaultURL
 }
