@@ -1,6 +1,8 @@
 package config
 
 import (
+	"log"
+
 	"github.com/alimgiray/guido/database"
 )
 
@@ -13,8 +15,28 @@ type ConfigurationManager struct {
 
 func NewConfigurationManager(DB *database.Database) *ConfigurationManager {
 	return &ConfigurationManager{
-		db: DB,
+		db:             DB,
+		configurations: load(DB),
 	}
+}
+
+func load(DB *database.Database) map[string]string {
+	configs := make(map[string]string)
+	rows, err := DB.Connection.Query("SELECT name, value FROM config")
+	if err != nil {
+		log.Println("Couldn't load configurations", err.Error())
+		return configs
+	}
+	for true {
+		if !rows.Next() {
+			break
+		}
+		var name string
+		var value string
+		rows.Scan(&name, &value)
+		configs[name] = value
+	}
+	return configs
 }
 
 func (c *ConfigurationManager) GetMeta(description, keywords string) *Meta {
