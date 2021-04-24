@@ -17,8 +17,8 @@ import (
 const createUserTableQuery = `
 	CREATE TABLE user (
 		"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-		"username" TEXT NOT NULL,
-		"email" TEXT,
+		"username" TEXT UNIQUE NOT NULL,
+		"email" TEXT UNIQUE,
 		"password" TEXT NOT NULL,
 		"createdAt" TEXT NOT NULL,
 		"type" TEXT NOT NULL

@@ -7,6 +7,7 @@ import (
 )
 
 var defaultAppName = "Guido"
+var defaultUserType = "user"
 
 type ConfigurationManager struct {
 	db             *database.Database
@@ -60,4 +61,11 @@ func (c *ConfigurationManager) GetAppName() string {
 		return val
 	}
 	return defaultAppName
+}
+
+func (c *ConfigurationManager) GetNewUserType() string {
+	if val, ok := c.configurations["userType"]; ok {
+		return val
+	}
+	return defaultUserType
 }

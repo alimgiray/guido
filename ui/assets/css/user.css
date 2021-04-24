@@ -1,9 +1,10 @@
 #auth {
-    margin: 20px 30px;
+    margin: 20px auto;
+    width: 50%;
 }
 
 #auth-form {
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 #auth-form input {
@@ -22,7 +23,7 @@
 #auth-form .form-row {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
     margin-top: 20px;
 }
 

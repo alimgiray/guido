@@ -1,16 +1,20 @@
 {{define "main"}}
 <div id="auth">
-    <h2>Login</h2>
-    <form id="auth-form" action="/user/login" method="POST">
-        <div class="form-row">
-            <input type="text" name="username" placeholder="username" minlength="3" maxlength="20" required>
-        </div>   
-        <div class="form-row">
-            <input type="password" name="password" placeholder="password" minlength="8" required>
-        </div>
-        <div class="form-row submit">
-            <input type="submit" value="Login">
-        </div>
-    </form>
+    <div>
+        <h2>Login</h2>
+    </div>
+    <div id="auth-form">
+        <form action="/user/login" method="POST">
+            <div class="form-row">
+                <input type="text" name="username" placeholder="username" minlength="3" maxlength="20" required>
+            </div>   
+            <div class="form-row">
+                <input type="password" name="password" placeholder="password" minlength="8" required>
+            </div>
+            <div class="form-row submit">
+                <input type="submit" value="Login">
+            </div>
+        </form>
+    </div>
 </div>
 {{end}}

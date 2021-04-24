@@ -1,7 +1,6 @@
 package user
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/alimgiray/guido/config"
@@ -27,6 +26,11 @@ func NewUserHandler(
 }
 
 func (u *UserHandler) GetLoginPage(c *gin.Context) {
+	if u.isLoggedIn(c) {
+		c.Redirect(http.StatusSeeOther, "/")
+		return
+	}
+
 	c.HTML(200, "login", gin.H{
 		"Title":  "Login",
 		"Header": u.config.GetHeader("", false),
@@ -39,18 +43,38 @@ type LoginForm struct {
 }
 
 func (u *UserHandler) Login(c *gin.Context) {
+	if u.isLoggedIn(c) {
+		c.Redirect(http.StatusSeeOther, "/")
+		return
+	}
+
 	var form LoginForm
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
 		return
 	}
-	log.Println(form)
-	c.JSON(200, gin.H{
-		"message": "ok",
-	})
+	user, err := u.userService.Login(form.Username, form.Password)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
+		return
+	}
+
+	sessionID, err := u.sessionService.CreateSession(user.ID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
+		return
+	}
+
+	c.SetCookie("session_id", sessionID, 60*60*24*30, "/", "", true, true)
+	c.Redirect(http.StatusSeeOther, "/")
 }
 
 func (u *UserHandler) GetRegisterPage(c *gin.Context) {
+	if u.isLoggedIn(c) {
+		c.Redirect(http.StatusSeeOther, "/")
+		return
+	}
+
 	c.HTML(200, "register", gin.H{
 		"Title":  "Register",
 		"Header": u.config.GetHeader("", false),
@@ -64,19 +88,44 @@ type RegisterForm struct {
 }
 
 func (u *UserHandler) Register(c *gin.Context) {
+	if u.isLoggedIn(c) {
+		c.Redirect(http.StatusSeeOther, "/")
+		return
+	}
+
 	var form RegisterForm
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
 		return
 	}
-	log.Println(form)
-	c.JSON(200, gin.H{
-		"message": "ok",
-	})
+	userType := u.config.GetNewUserType()
+	err := u.userService.Register(form.Username, form.Password, form.Email, userType)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
+		return
+	}
+
+	u.Login(c)
 }
 
 func (u *UserHandler) Logout(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "ok",
-	})
+	if !u.isLoggedIn(c) {
+		c.Redirect(http.StatusSeeOther, "/")
+		return
+	}
+
+	cookie, _ := c.Cookie("session_id")
+	u.sessionService.RemoveSession(cookie)
+
+	c.SetCookie("session_id", "", 0, "/", "", true, true)
+	c.Redirect(http.StatusSeeOther, "/")
+}
+
+func (u *UserHandler) isLoggedIn(c *gin.Context) bool {
+	cookie, err := c.Cookie("session_id")
+	if err == nil {
+		_, loggedIn := u.sessionService.IsUserLoggedIn(cookie)
+		return loggedIn
+	}
+	return false
 }
