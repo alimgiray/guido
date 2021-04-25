@@ -28,7 +28,6 @@ func NewUserHandler(
 
 func (u *UserHandler) GetLoginPage(c *gin.Context) {
 	if u.isLoggedIn(c) {
-
 		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", u.config.GetDefaultURL()))
 		return
 	}

@@ -33,3 +33,11 @@ func (u *UserService) Login(username, password string) (*User, error) {
 	}
 	return user, nil
 }
+
+func (u *UserService) GetUsernameFromID(userID int) (string, error) {
+	user, err := u.userRepository.FindByID(userID)
+	if err != nil {
+		return "", err
+	}
+	return user.Username, nil
+}

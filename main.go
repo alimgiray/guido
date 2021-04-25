@@ -34,11 +34,11 @@ func init() {
 	configurationManager := config.NewConfigurationManager(db)
 
 	userHandler = user.NewUserHandler(userService, sessionService, configurationManager)
-	topicHandler = topic.NewTopicHandler(topicService, sessionService, configurationManager)
+	topicHandler = topic.NewTopicHandler(topicService, sessionService, userService, configurationManager)
 }
 
 func main() {
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 
 	if gin.Mode() == gin.ReleaseMode {
@@ -66,8 +66,10 @@ func main() {
 	topicRouter.GET("/create", topicHandler.GetCreateTopicPage)
 	topicRouter.POST("/create", topicHandler.CreateTopic)
 	topicRouter.POST("/add", topicHandler.AddTopic)
-	topicRouter.GET("/list", topicHandler.ListTopic)
-	topicRouter.GET("/search", topicHandler.SearchTopic)
+
+	apiRouter := r.Group("/api")
+	apiRouter.GET("/list", topicHandler.ListTopic)
+	apiRouter.GET("/search", topicHandler.SearchTopic)
 
 	r.GET("/:topic", topicHandler.GetTopic)
 	r.GET("/", topicHandler.GetDefault)

@@ -1,8 +1,0 @@
-body {
-    display: grid;
-    grid-template-areas: 
-    "header header"
-    "main main";
-    grid-template-columns: 1fr;
-}
-

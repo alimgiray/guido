@@ -1,3 +1,20 @@
 {{define "main"}}
-create topic
+<div id="create-topic">
+    <div>
+        <h2>Create Topic</h2>
+    </div>
+    <div id="topic-form">
+        <form action="/topic/create" method="POST">
+            <div class="form-row">
+                <input type="text" placeholder="Topic name" name="name" maxlength="50" required>
+            </div>
+            <div class="form-row">
+                <textarea placeholder="Enter your post"></textarea>
+            </div>
+            <div class="form-row">
+                <input type="submit" value="Create">
+            </div>
+        </form>
+    </div>
+</div>
 {{end}}
