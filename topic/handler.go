@@ -3,6 +3,7 @@ package topic
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/alimgiray/guido/user"
@@ -45,10 +46,32 @@ func (t *TopicHandler) GetCreateTopicPage(c *gin.Context) {
 	})
 }
 
+type CreateTopicForm struct {
+	Title string `form:"title" binding:"required"`
+	Post  string `form:"post" binding:"required"`
+}
+
 func (t *TopicHandler) CreateTopic(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "ok",
-	})
+	userID, err := t.getUserID(c)
+	if err != nil {
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", t.config.GetDefaultURL()))
+		return
+	}
+
+	var form CreateTopicForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
+		return
+	}
+
+	url, err := t.topicService.CreateTopic(form.Title, form.Post, userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
+		return
+	}
+
+	// Topic created, redirect user to that topic
+	c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", url))
 }
 
 func (t *TopicHandler) AddTopic(c *gin.Context) {
@@ -64,6 +87,8 @@ func (t *TopicHandler) ListTopic(c *gin.Context) {
 }
 
 func (t *TopicHandler) GetTopic(c *gin.Context) {
+	log.Println("get topic")
+	log.Println(c.Param("topic"))
 	// Get default header
 	header := t.config.GetHeader("", false)
 	username, err := t.getUsernameFromCookie(c)

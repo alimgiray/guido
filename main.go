@@ -49,10 +49,14 @@ func main() {
 		r.GET("/script/*filepath", func(c *gin.Context) {
 			c.FileFromFS(path.Join("/ui/assets/", c.Request.URL.Path), http.FS(f))
 		})
+		r.GET("/favicon.ico", func(c *gin.Context) {
+			c.FileFromFS(path.Join("/ui/assets/images/", c.Request.URL.Path), http.FS(f))
+		})
 	} else {
 		r.HTMLRender = config.LocalRenderer()
 		r.Static("/css", "./ui/assets/css")
 		r.Static("/script", "./ui/assets/script")
+		r.StaticFile("/favicon.ico", "./ui/assets/images/favicon.ico")
 	}
 
 	userRouter := r.Group("/user")
@@ -66,13 +70,13 @@ func main() {
 	topicRouter.GET("/create", topicHandler.GetCreateTopicPage)
 	topicRouter.POST("/create", topicHandler.CreateTopic)
 	topicRouter.POST("/add", topicHandler.AddTopic)
+	topicRouter.GET("/:topic", topicHandler.GetTopic)
 
 	apiRouter := r.Group("/api")
 	apiRouter.GET("/list", topicHandler.ListTopic)
 	apiRouter.GET("/search", topicHandler.SearchTopic)
 
-	r.GET("/:topic", topicHandler.GetTopic)
-	r.GET("/", topicHandler.GetDefault)
+	r.NoRoute(topicHandler.GetDefault)
 
 	r.Run(":4000")
 }

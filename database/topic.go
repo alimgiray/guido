@@ -9,8 +9,8 @@ import (
 const createTopicTableQuery = `
 	CREATE TABLE topic (
 		"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-		"title" TEXT NOT NULL,
-		"url" TEXT NOT NULL,
+		"title" TEXT UNIQUE NOT NULL,
+		"url" TEXT UNIQUE NOT NULL,
 		"user" INTEGER NOT NULL,
 		"createdAt" TEXT NOT NULL,
 		"updatedAt" TEXT,

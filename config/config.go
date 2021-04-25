@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/alimgiray/guido/database"
@@ -72,8 +73,9 @@ func (c *ConfigurationManager) GetNewUserType() string {
 }
 
 func (c *ConfigurationManager) GetDefaultURL() string {
+	url := fmt.Sprintf("topic/%s", defaultURL)
 	if val, ok := c.configurations["defaultURL"]; ok {
-		return val
+		url = fmt.Sprintf("topic/%s", val)
 	}
-	return defaultURL
+	return url
 }
