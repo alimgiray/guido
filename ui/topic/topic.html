@@ -15,9 +15,9 @@
             <div class="post-user">
                 <span class="post-date">
                     <a href="/post/{{.ID}}" alt="asdf  ">
-                        {{ .FormatCreatedAt }}
+                        {{ .CreatedAt | .FormatDate }}
                         {{ if .IsUpdated }}
-                        ~ {{ .UpdatedAt }} 
+                        ~ {{ .UpdatedAt | .FormatDate }} 
                         {{ end }}
                     </a>
                 </span>

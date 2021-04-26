@@ -23,8 +23,8 @@ type Post struct {
 	UpdatedAt time.Time
 }
 
-func (p *Post) FormatCreatedAt() string {
-	return p.CreatedAt.Format("2006-01-02 15:04")
+func (p *Post) FormatDate(t time.Time) string {
+	return t.Format("2006-01-02 15:04")
 }
 
 func (p *Post) IsUpdated() bool {
