@@ -20,6 +20,23 @@ func NewTopicRepository(DB *database.Database) *TopicRepository {
 	}
 }
 
+func (t *TopicRepository) FindByID(id int) (*Topic, error) {
+	topic := &Topic{}
+	row := t.db.Connection.QueryRow("SELECT id, title, url, user, createdAt, updatedAt FROM topic WHERE id = $1", id)
+	var createdAt string
+	var updatedAt sql.NullString
+	err := row.Scan(&topic.ID, &topic.Title, &topic.URL, &topic.User, &createdAt, &updatedAt)
+	if err != nil {
+		log.Println("TopicRepository-FindByID", err.Error())
+		return nil, errors.New("not found")
+	}
+	topic.CreatedAt, _ = time.Parse(time.RFC3339, createdAt)
+	if updatedAt.Valid {
+		topic.UpdatedAt, _ = time.Parse(time.RFC3339, updatedAt.String)
+	}
+	return topic, nil
+}
+
 func (t *TopicRepository) FindByURL(url string) (*Topic, error) {
 	topic := &Topic{}
 	row := t.db.Connection.QueryRow("SELECT id, title, url, user, createdAt, updatedAt FROM topic WHERE url = $1", url)

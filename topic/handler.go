@@ -3,9 +3,9 @@ package topic
 import (
 	"errors"
 	"fmt"
-	"log"
 	"math"
 	"net/http"
+	"strconv"
 
 	"github.com/alimgiray/guido/user"
 
@@ -72,15 +72,40 @@ func (t *TopicHandler) CreateTopic(c *gin.Context) {
 	}
 
 	// Topic created, redirect user to that topic
-	c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", url))
+	c.Redirect(http.StatusSeeOther, fmt.Sprintf("/topic/%s", url))
+}
+
+type AddTopicForm struct {
+	Post string `form:"post" binding:"required"`
 }
 
 func (t *TopicHandler) AddTopic(c *gin.Context) {
-	log.Println("add topic")
-	log.Println(c.Query("id"))
-	c.JSON(200, gin.H{
-		"message": "ok",
-	})
+	userID, err := t.getUserID(c)
+	if err != nil {
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/%s", t.config.GetDefaultURL()))
+		return
+	}
+
+	topicID := c.Query("id")
+	tID, err := strconv.Atoi(topicID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
+		return
+	}
+
+	var form AddTopicForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
+		return
+	}
+
+	topic, err := t.topicService.AddPost(form.Post, tID, userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
+		return
+	}
+
+	c.Redirect(http.StatusSeeOther, fmt.Sprintf("/topic/%s", topic.URL))
 }
 
 func (t *TopicHandler) ListTopic(c *gin.Context) {

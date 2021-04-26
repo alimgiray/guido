@@ -61,6 +61,31 @@ func (s *TopicService) GetTopic(url string) (*Topic, error) {
 	return topic, nil
 }
 
+func (s *TopicService) AddPost(postText string, topicID, userID int) (*Topic, error) {
+	topic, err := s.topicRepository.FindByID(topicID)
+	if err != nil {
+		log.Println("TopicService-AddPost-FindByID", err.Error())
+		return nil, err
+	}
+	post := &Post{
+		Text:      postText,
+		Topic:     topic.ID,
+		CreatedAt: time.Now(),
+		User:      userID,
+	}
+	post, err = s.topicRepository.InsertPost(post)
+	if err != nil {
+		log.Println("TopicService-AddPost-InsertPost", err.Error())
+		return nil, err
+	}
+	topic.UpdatedAt = time.Now()
+	err = s.topicRepository.UpdateTopic(topic)
+	if err != nil {
+		log.Println("TopicService-AddPost-UpdateTopic", err.Error())
+	}
+	return topic, nil
+}
+
 func (s *TopicService) titleToURL(title string) string {
 	return strings.ToLower(strings.ReplaceAll(title, " ", "-"))
 }
