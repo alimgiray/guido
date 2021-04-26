@@ -27,5 +27,17 @@
         </div>
     </div>
     {{end}}
+    {{ if .IsLoggedIn }}
+        <div id="topic-form">
+            <form action="/topic/add?id={{.ID}}" method="POST">
+                <div class="form-row">
+                    <textarea name="post" placeholder="Enter your post" required></textarea>
+                </div>
+                <div class="form-row">
+                    <input type="submit" value="Send">
+                </div>
+            </form>
+        </div>
+    {{end}}
 </div>
 {{end}}

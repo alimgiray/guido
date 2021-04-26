@@ -3,6 +3,7 @@ package topic
 import (
 	"errors"
 	"fmt"
+	"log"
 	"math"
 	"net/http"
 
@@ -75,6 +76,8 @@ func (t *TopicHandler) CreateTopic(c *gin.Context) {
 }
 
 func (t *TopicHandler) AddTopic(c *gin.Context) {
+	log.Println("add topic")
+	log.Println(c.Query("id"))
 	c.JSON(200, gin.H{
 		"message": "ok",
 	})
@@ -100,6 +103,7 @@ func (t *TopicHandler) GetTopic(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
 		return
 	}
+	topic.IsLoggedIn = header.IsLoggedIn
 
 	metaDescription := ""
 	if topic.Posts != nil && topic.Posts[0] != nil {
