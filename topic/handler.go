@@ -114,6 +114,10 @@ func (t *TopicHandler) ListTopic(c *gin.Context) {
 	})
 }
 
+type NavList struct {
+	Topics []*Topic
+}
+
 func (t *TopicHandler) GetTopic(c *gin.Context) {
 	// Get default header
 	header := t.config.GetHeader("", false)
@@ -135,12 +139,15 @@ func (t *TopicHandler) GetTopic(c *gin.Context) {
 		metaDescription = topic.Posts[0].Text[0:int(math.Min(float64(160), float64(len(topic.Posts[0].Text))))]
 	}
 
+	topics := t.topicService.GetNavList("updatedAt", "DESC")
+
 	c.HTML(200, "topic", gin.H{
 		"Title":       topic.Title,
 		"Meta":        t.config.GetMeta(topic.Title, metaDescription),
 		"Header":      header,
 		"ShowSidebar": true,
 		"Main":        topic,
+		"Nav":         &NavList{Topics: topics},
 	})
 }
 

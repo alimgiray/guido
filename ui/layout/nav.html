@@ -1,2 +1,9 @@
 {{define "nav"}}
+<div id="nav-list">
+    {{range .Topics}}
+        <div class="nav-topic">
+            <a href="/topic/{{.URL}}">{{.Title}}</a>
+        </div>
+    {{end}}
+</div>
 {{end}}

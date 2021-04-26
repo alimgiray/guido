@@ -86,6 +86,10 @@ func (s *TopicService) AddPost(postText string, topicID, userID int) (*Topic, er
 	return topic, nil
 }
 
+func (s *TopicService) GetNavList(criteria, order string) []*Topic {
+	return s.topicRepository.GetTopics(criteria, order)
+}
+
 func (s *TopicService) titleToURL(title string) string {
 	return strings.ToLower(strings.ReplaceAll(title, " ", "-"))
 }

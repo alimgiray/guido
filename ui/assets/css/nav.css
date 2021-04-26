@@ -1,0 +1,12 @@
+#nav-list {
+    margin-top: 10px;
+}
+
+.nav-topic {
+    margin: 10px 20px;
+}
+
+.nav-topic a:any-link {
+    text-decoration: none;
+    color: var(--primary-color);
+}
