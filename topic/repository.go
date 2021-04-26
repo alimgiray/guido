@@ -44,7 +44,7 @@ func (t *TopicRepository) InsertTopic(topic *Topic) (*Topic, error) {
 		log.Println("TopicRepository-InsertTopic-Prepare", err.Error())
 		return nil, err
 	}
-	result, err := statement.Exec(&topic.Title, &topic.URL, &topic.User, &topic.CreatedAt, &topic.UpdatedAt)
+	result, err := statement.Exec(&topic.Title, &topic.URL, &topic.User, (&topic.CreatedAt).Format(time.RFC3339), (&topic.UpdatedAt).Format(time.RFC3339))
 	if err != nil {
 		log.Println("TopicRepository-InsertTopic-Exec", err.Error())
 		return nil, err
@@ -94,7 +94,7 @@ func (t *TopicRepository) InsertPost(post *Post) (*Post, error) {
 		log.Println("TopicRepository-InsertTopic", err.Error())
 		return nil, err
 	}
-	result, err := statement.Exec(&post.Text, &post.User, &post.Topic, &post.CreatedAt)
+	result, err := statement.Exec(&post.Text, &post.User, &post.Topic, (&post.CreatedAt).Format(time.RFC3339))
 	if err != nil {
 		log.Println("TopicRepository-InsertPost", err.Error())
 		return nil, err
@@ -107,7 +107,7 @@ func (t *TopicRepository) InsertPost(post *Post) (*Post, error) {
 // TODO pagination
 func (t *TopicRepository) FindPostsByTopic(topicID int) ([]*Post, error) {
 	posts := make([]*Post, 0, 20)
-	rows, err := t.db.Connection.Query("SELECT id, text, user, createdAt, updatedAt FROM post WHERE topic = $1", topicID)
+	rows, err := t.db.Connection.Query("SELECT p.id, p.text, p.user, username, p.createdAt, p.updatedAt FROM post p LEFT JOIN user ON user.ID = p.user WHERE topic = $1", topicID)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -119,10 +119,10 @@ func (t *TopicRepository) FindPostsByTopic(topicID int) ([]*Post, error) {
 		post := &Post{}
 		var createdAt string
 		var updatedAt sql.NullString
-		rows.Scan(&post.ID, &post.Text, &post.User, &createdAt, &updatedAt)
-		post.CreatedAt, _ = time.Parse(time.RFC3339, createdAt)
+		rows.Scan(&post.ID, &post.Text, &post.User, &post.Username, &createdAt, &updatedAt)
+		post.CreatedAt, err = time.Parse(time.RFC3339, createdAt)
 		if updatedAt.Valid {
-			post.UpdatedAt, _ = time.Parse(time.RFC3339, updatedAt.String)
+			post.UpdatedAt, err = time.Parse(time.RFC3339, updatedAt.String)
 		}
 		posts = append(posts, post)
 	}

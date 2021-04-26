@@ -1,3 +1,31 @@
 {{define "main"}}
-show topic
+<div id="topic">
+    <div id="topic-title">
+        {{.Title}}
+    </div>
+    {{range .Posts}}
+    <div class="post"> 
+        <div>
+            {{ .Text }}
+        </div>
+        <div class="post-info">
+            <div class="spacer">
+                <hr>
+            </div>
+            <div class="post-user">
+                <span class="post-date">
+                    <a href="/post/{{.ID}}" alt="asdf  ">
+                        {{ .FormatCreatedAt }}
+                        {{ if .IsUpdated }}
+                        ~ {{ .UpdatedAt }} 
+                        {{ end }}
+                    </a>
+                </span>
+                -
+                <a href="/user/{{.Username}}">{{ .Username }}</a>
+            </div>
+        </div>
+    </div>
+    {{end}}
+</div>
 {{end}}

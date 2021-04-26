@@ -3,7 +3,7 @@ package topic
 import (
 	"errors"
 	"fmt"
-	"log"
+	"math"
 	"net/http"
 
 	"github.com/alimgiray/guido/user"
@@ -87,19 +87,31 @@ func (t *TopicHandler) ListTopic(c *gin.Context) {
 }
 
 func (t *TopicHandler) GetTopic(c *gin.Context) {
-	log.Println("get topic")
-	log.Println(c.Param("topic"))
 	// Get default header
 	header := t.config.GetHeader("", false)
 	username, err := t.getUsernameFromCookie(c)
 	if err == nil {
 		header = t.config.GetHeader(username, true)
 	}
+
+	url := c.Param("topic")
+	topic, err := t.topicService.GetTopic(url)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) // TODO error page
+		return
+	}
+
+	metaDescription := ""
+	if topic.Posts != nil && topic.Posts[0] != nil {
+		metaDescription = topic.Posts[0].Text[0:int(math.Min(float64(160), float64(len(topic.Posts[0].Text))))]
+	}
+
 	c.HTML(200, "topic", gin.H{
-		"Title":       "Some topic",
-		"Meta":        t.config.GetMeta("desc", "k1, k2, k3"),
+		"Title":       topic.Title,
+		"Meta":        t.config.GetMeta(topic.Title, metaDescription),
 		"Header":      header,
 		"ShowSidebar": true,
+		"Main":        topic,
 	})
 }
 

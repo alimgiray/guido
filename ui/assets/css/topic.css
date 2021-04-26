@@ -33,3 +33,54 @@
     width: 100px;
     align-self: flex-end;
 }
+
+#topic {
+    width: 66%;
+    margin: 20px 30px;
+}
+
+#topic-title {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.post {
+    margin-top: 20px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.post-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.post-user {
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+.post-user a:any-link {
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
+
+.post-date a:any-link {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: smaller;
+    font-weight: normal;
+    letter-spacing: normal;
+}
+
+.spacer {
+    padding: 10px 0;
+    width: 100%;
+}
+
+.spacer hr {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+}

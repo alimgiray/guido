@@ -78,5 +78,5 @@ func main() {
 
 	r.NoRoute(topicHandler.GetDefault)
 
-	r.Run(":4000")
+	r.Run(":80")
 }

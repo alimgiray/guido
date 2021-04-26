@@ -46,6 +46,21 @@ func (t *TopicService) CreateTopic(title, postText string, userID int) (string, 
 	return topic.URL, nil
 }
 
+func (s *TopicService) GetTopic(url string) (*Topic, error) {
+	topic, err := s.topicRepository.FindByURL(url)
+	if err != nil {
+		log.Println("TopicService-GetTopic-FindByURL", err.Error())
+		return nil, err
+	}
+	posts, err := s.topicRepository.FindPostsByTopic(topic.ID)
+	if err != nil {
+		log.Println("TopicService-GetTopic-FindPostsByTopic", err.Error())
+		return nil, err
+	}
+	topic.Posts = posts
+	return topic, nil
+}
+
 func (s *TopicService) titleToURL(title string) string {
 	return strings.ToLower(strings.ReplaceAll(title, " ", "-"))
 }
